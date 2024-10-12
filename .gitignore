@@ -642,3 +642,6 @@ FodyWeavers.xsd
 # Linux Kernel Source
 **/**/linux/
 **/**/linux-6.1.tar.xz
+**/**/src/syscalls.h
+**/**/src/syscall_64.tbl
+**/**/src/Makefile

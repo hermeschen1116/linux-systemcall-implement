@@ -1,5 +1,5 @@
 # copy modified files to source
-cp src/* linux/arch/x86/kernel/
+cp src/* linux/arch/x86/kernel/*.c
 
 # build
 sudo make menuconfig -j8 -C linux -i linux
