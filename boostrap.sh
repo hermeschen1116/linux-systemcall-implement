@@ -6,7 +6,8 @@ sudo apt install ccache git fakeroot build-essential ncurses-dev xz-utils libssl
 # download linux kernel
 sudo apt install wget -y
 wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.tar.xz
-mkdir linux && tar xvf linux-6.1.tar.xz -C linux
+tar xvf linux-6.1.tar.xz
+mv linux-6.1 linux
 
 # copy default config from system
 cp -v /boot/config-$(uname -r) ./linux/.config
