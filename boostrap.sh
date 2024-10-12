@@ -14,6 +14,6 @@ rm linux-6.1.tar.xz
 cp -v /boot/config-$(uname -r) ./linux/.config
 
 # link config
-ln -s /linux/include/linux/syscalls.h /src/syscalls.h
-ln -s /linux/arch/x86/entry/syscalls/syscall_64.tbl /src/syscall_64.tbl
-ln -s /linux/arch/x86/kernel/Makefile /src/Makefile
+ln -s linux/include/linux/syscalls.h src/syscalls.h
+ln -s linux/arch/x86/entry/syscalls/syscall_64.tbl src/syscall_64.tbl
+ln -s linux/arch/x86/kernel/Makefile src/Makefile
