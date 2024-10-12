@@ -640,4 +640,5 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,visualstudiocode,visualstudio,jetbrains+all,c,cmake
 
 # Linux Kernel Source
-**/**/linux-6.1/
+**/**/linux/
+**/**/linux-6.1.tar.xz
