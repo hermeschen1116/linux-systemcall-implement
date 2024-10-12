@@ -1,3 +1,4 @@
+#!/bin/sh
 # copy modified files to source
 cp src/* linux/arch/x86/kernel/*.c
 
