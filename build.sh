@@ -1,2 +1,4 @@
-sudo make menuconfig -j8 -C ./linux
-sudo make arch=$(arch) -j8 -C ./linux
+cd linux
+sudo make menuconfig -j8
+sudo make arch=$(arch) -j8
+cd ..
