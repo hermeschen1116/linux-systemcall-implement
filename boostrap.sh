@@ -18,17 +18,6 @@ fi
 cp -v /boot/config-$(uname -r) ./linux/.config
 
 # link config
-if [ ! -L "src/syscalls.h" ]
-then
-	ln -s ../linux/include/linux/syscalls.h src/syscalls.h
-fi
-
-if [ ! -L "src/syscall_64.tbl" ]
-then
+ln -s ../linux/include/linux/syscalls.h src/syscalls.h
 ln -s ../linux/arch/x86/entry/syscalls/syscall_64.tbl src/syscall_64.tbl
-fi
-
-if [ ! -L "src/Makefile" ]
-then
 ln -s ../linux/arch/x86/kernel/Makefile src/Makefile
-if
