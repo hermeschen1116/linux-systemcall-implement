@@ -3,5 +3,6 @@
 cp src/*.c linux/arch/x86/kernel/
 
 # build
-sudo make menuconfig -j8 -C linux -i linux
-sudo make arch=$(arch) -j8 -C linux -i linux
+cd linux
+sudo make menuconfig -j8
+sudo make arch=$(arch) -j8
