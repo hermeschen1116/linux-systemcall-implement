@@ -15,4 +15,3 @@ sudo make modules -j$process
 sudo make modules_install -j$process
 sudo make install -j$process
 sudo update-grub
-sudo reboot
