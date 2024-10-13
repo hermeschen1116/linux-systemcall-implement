@@ -645,3 +645,4 @@ FodyWeavers.xsd
 **/**/src/syscalls.h
 **/**/src/syscall_64.tbl
 **/**/src/Makefile
+!**/**/systemcall/Makefile
