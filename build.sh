@@ -4,9 +4,9 @@ cp src/*.c linux/arch/x86/kernel/
 
 # build
 cd linux
-sudo make menuconfig -j8
-sudo make bzImage arch=$(arch) -j8　
+sudo make menuconfig -j$(nproc)
+sudo make bzImage -j$(nproc)
 
 # install
-sudo make modules_install -j8
-sudo make install -j8
+sudo make modules_install -j$(nproc)
+sudo make install -j$(nproc)
