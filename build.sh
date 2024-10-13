@@ -5,7 +5,7 @@ cp src/*.c linux/arch/x86/kernel/
 # build
 cd linux
 sudo make menuconfig -j$(nproc)
-sudo make bzImage -j$(nproc)
+sudo make -j$(nproc)
 
 # install
 sudo make modules_install -j$(nproc)
