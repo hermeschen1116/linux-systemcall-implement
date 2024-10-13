@@ -4,7 +4,7 @@ process=$(nproc)
 architecture=$(arch)
 
 # copy modified files to source
-cp -r src/systemcall/* linux/custom_systemcall/
+cp src/systemcall/* linux/custom_systemcall/
 
 # build
 cd linux
