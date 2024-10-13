@@ -3,9 +3,6 @@
 process=$(nproc)
 architecture=$(arch)
 
-# copy default config from system
-cp -v /boot/config-$(uname -r) ./linux/.config
-
 # copy modified files to source
 cp src/systemcall/* linux/custom_systemcall/
 

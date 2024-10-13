@@ -12,8 +12,12 @@ then
 	tar xvf linux-6.1.tar.xz
 	mv linux-6.1 linux
 	rm linux-6.1.tar.xz
-	mkdir linux/custom_systemcall
 fi
+
+# copy default config from system
+cp -v /boot/config-$(uname -r) ./linux/.config
+
+mkdir linux/custom_systemcall
 
 # link config
 ln -s ../linux/include/linux/syscalls.h src/syscalls.h
