@@ -8,11 +8,12 @@ cp src/systemcall/* linux/custom_systemcall/
 
 # build
 cd linux
-sudo make menuconfig -j$process
-sudo make bzImage Arch=$architecture -j$process
-sudo make modules Arch=$architecture -j$process
+sudo make menuconfig -j$process O=./build
+sudo make Arch=$architecture -j$process O=./build
+sudo make bzImage Arch=$architecture -j$process O=./build
+sudo make modules Arch=$architecture -j$process O=./build
 
 # install
-sudo make modules_install -j$process
-sudo make install -j$process
+sudo make modules_install -j$process O=./build
+sudo make install -j$process O=./build
 sudo update-grub
