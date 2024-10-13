@@ -12,7 +12,7 @@ then
 	tar xvf linux-6.1.tar.xz
 	mv linux-6.1 linux
 	rm linux-6.1.tar.xz
-	mkdir linux/project
+	mkdir linux/custom_systemcall
 fi
 
 # copy default config from system
