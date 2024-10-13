@@ -1,6 +1,6 @@
 #!/bin/sh
 
-process = $(nproc)
+process=$(nproc)
 
 # copy modified files to source
 cp -r src/systemcall linux/custom_systemcall
