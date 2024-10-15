@@ -9,7 +9,7 @@ cp src/systemcall/* linux/custom_systemcall/
 cd linux
 # build
 sudo make menuconfig -j$process O=./build
-sudo make Arch=$architecture -j$process O=./build
+sudo make LLVM=1 Arch=$architecture -j$process O=./build
 
 # install
 sudo make modules_install -j$process O=./build

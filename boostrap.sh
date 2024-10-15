@@ -2,7 +2,7 @@
 # install necessary packages for building linux kernel
 sudo apt update
 sudo apt upgrade -y
-sudo apt install ccache git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison dwarves -y
+sudo apt install ccache git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison dwarves llvm clang -y
 
 # download linux kernel
 if [ ! -d "linux" ]
@@ -13,9 +13,6 @@ then
 	mv linux-6.1 linux
 	rm linux-6.1.tar.xz
 fi
-
-# copy default config from system
-cp -v /boot/config-$(uname -r) ./linux/.config
 
 mkdir linux/custom_systemcall
 
