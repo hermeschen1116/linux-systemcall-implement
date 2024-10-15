@@ -9,8 +9,8 @@ build_dir=./build
 cp src/systemcall/* linux/custom_systemcall/
 
 # build
-KBUILD_BUILD_TIMESTAMP="" sudo make menuconfig LLVM=1 CC="ccache clang" -j$process -C$source O=$build_dir
-KBUILD_BUILD_TIMESTAMP="" sudo make LLVM=1 CC="ccache clang" Arch=$architecture -j$process -C$source O=$build_dir
+KBUILD_BUILD_TIMESTAMP="" sudo make menuconfig CC="ccache gcc" -j$process -C$source O=$build_dir
+KBUILD_BUILD_TIMESTAMP="" sudo make CC="ccache gcc" Arch=$architecture -j$process -C$source O=$build_dir
 
 # install
 sudo make modules_install -j$process -C$source O=$build_dir
