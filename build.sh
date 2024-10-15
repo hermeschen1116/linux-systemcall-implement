@@ -8,8 +8,8 @@ cp src/systemcall/* linux/custom_systemcall/
 
 cd linux
 # build
-sudo make menuconfig LLVM=1 CC=clang -j$process O=./build
-sudo make LLVM=1 CC=clang Arch=$architecture -j$process O=./build
+sudo make menuconfig LLVM=1 CC="ccache clang" -j$process O=./build
+sudo make LLVM=1 CC="ccache clang" Arch=$architecture -j$process O=./build
 
 # install
 sudo make modules_install -j$process O=./build
