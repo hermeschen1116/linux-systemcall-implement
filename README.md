@@ -1,5 +1,13 @@
 # Linux Systemcall Implementation
 
+## Environment
+
+- Linux Distro: Debian 12 Bookworm
+
+- Kernel version: 6.1
+
+- Arch: amd64/x86_64
+
 ## How to Use?
 
 1. execute script to setup environment and download kernel sources.
