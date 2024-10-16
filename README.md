@@ -12,7 +12,7 @@
 
 2. add path to new systemcall in Makefile (already linked to src/Makefile)
 
-   ![place to edit in Makefile](asset/Makefile.png)
+   ![place to edit in Makefile](assets/Makefile.png)
 
    - add this to core-y
 
