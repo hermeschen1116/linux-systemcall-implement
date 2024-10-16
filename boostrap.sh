@@ -2,7 +2,7 @@
 # install necessary packages for building linux kernel
 sudo apt update
 sudo apt upgrade -y
-sudo apt install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison dwarves ccache -y
+sudo apt install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison dwarves ccache liblz4-tool -y
 
 # download linux kernel
 if [ ! -d "linux" ]
