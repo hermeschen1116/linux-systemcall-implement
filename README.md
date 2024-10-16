@@ -18,17 +18,19 @@
 
      ```shell
      core-y		:= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ {{ folder to put new systemcall }}/
+     # we put new systemcalls under custom_systemcall in kernel source
+     core-y		:= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ custom_systemcall/
      ```
 
 3. add or edit new systemcall (include source files and Makefile) in **src/systemcall/**
 
-   - you can check example hello_world systemcall under src
+   - you can check example systemcall (hello_world.c) under src/
 
 4. add systemcall to syscall_64.tbl (already linked to src/syscall_64.tbl)
 
    ![place to edit in syscall_64.tbl](assets/syscall_64_tbl.png)
 
-5. add systemcall to syscalls.h (already linked to src//syscalls.h)
+5. add systemcall to syscalls.h (already linked to src/syscalls.h)
 
    ![place to edit in syscalls.h](assets/syscalls_h.png)
 
