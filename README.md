@@ -50,6 +50,6 @@
    sh build.sh
    ```
 
-7. (optional) if you use VM like lima vm, you cannot access grub entry during boot, remember to update the default kernel entry in /etc/default/grub then execute update-grub again
+7. ([optional](https://unix.stackexchange.com/questions/198003/set-the-default-kernel-in-grub)) if you use VM like lima vm, you cannot access grub entry during boot, remember to update the default kernel entry in /etc/default/grub then execute update-grub again
 
 8. reboot the os with new kernel then test your code
