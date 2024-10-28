@@ -51,7 +51,5 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	physical_address = (pte_val(*pte) & PAGE_MASK) |
 			   (virtual_address & ~PAGE_MASK);
 
-	pte_unmap(pte);
-
 	return physical_address;
 }
