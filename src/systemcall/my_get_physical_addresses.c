@@ -6,8 +6,7 @@
 #include <linux/uaccess.h>
 #include <linux/kernel.h>
 
-SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long __user,
-		user_virtual_address)
+SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 {
 	unsigned long virtual_address;
 	pgd_t *pgd;
@@ -24,7 +23,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long __user,
 	}
 
 	// Copy the virtual address from user space
-	if (copy_from_user(&virtual_address, &user_virtual_address,
+	if (copy_from_user(&virtual_address, user_virtual_address,
 			   sizeof(void *))) {
 		return 0;
 	}
