@@ -29,10 +29,11 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	if (!pte_present(*pte)) {
 		printk(KERN_WARNING
 		       "my_get_physical_addresses: No PTE found\n");
+		pte_unmap(pte);
 		return 0;
 	}
 
-	physical_address = (pte_pfn(*pte) << PAGE_SHIFT) |
+	physical_address = (pte_val(*pte) & PAGE_MASK) |
 			   (virtual_address & ~PAGE_MASK);
 
 	pte_unmap(pte);
