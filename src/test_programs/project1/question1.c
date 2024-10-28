@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <syscall.h>
+#include <sys/types.h>
 
 //void * my_get_physical_addresses(void *);
 
