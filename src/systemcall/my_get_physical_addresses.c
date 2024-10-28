@@ -15,7 +15,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
-	void *physical_address;
+	unsigned long physical_address;
 
 	// Copy the virtual address from user space
 	if (copy_from_user(&virtual_address, &user_virtual_address,
@@ -54,8 +54,8 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	}
 
 	// Get the page frame number (PFN) and calculate the physical address
-	physical_address = (pte_pfn(*pte) << PAGE_SHIFT) |
-			   (virtual_address & ~PAGE_MASK);
+	physical_address = (unsigned long)((pte_pfn(*pte) << PAGE_SHIFT) |
+					   (virtual_address & ~PAGE_MASK));
 
 	pte_unmap(pte);
 
