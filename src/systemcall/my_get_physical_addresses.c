@@ -6,7 +6,8 @@
 #include <linux/uaccess.h>
 #include <linux/kernel.h>
 
-SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long, user_virtual_address)
+SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long __user,
+		user_virtual_address)
 {
 	unsigned long virtual_address;
 	pgd_t *pgd;
@@ -14,10 +15,16 @@ SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long, user_virtual_address)
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
-	unsigned long physical_address = 0;
+	unsigned long physical_address;
+
+	// Check if the virtual address is valid
+	if (!access_ok(VERIFY_READ, (void __user *)user_virtual_address,
+		       sizeof(unsigned long))) {
+		return 0; // Invalid address
+	}
 
 	// Copy the virtual address from user space
-	if (copy_from_user(&virtual_address, user_virtual_address,
+	if (copy_from_user(&virtual_address, &user_virtual_address,
 			   sizeof(void *))) {
 		return 0;
 	}
