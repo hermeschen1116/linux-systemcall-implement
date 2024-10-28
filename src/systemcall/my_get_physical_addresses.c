@@ -7,11 +7,6 @@
 
 SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 {
-	pgd_t *pgd;
-	p4d_t *p4d;
-	pud_t *pud;
-	pmd_t *pmd;
-	pte_t *pte;
 	unsigned long virtual_address;
 	unsigned long physical_address = 0;
 
@@ -25,7 +20,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	virtual_address = (unsigned long)user_virtual_address;
 
 	// Walk the page table to find the page table entry
-	if (!follow_pte(current->mm, virtual_address, pte, NULL)) {
+	if (!follow_pte(current->mm, virtual_address, &pte, NULL)) {
 		printk(KERN_WARNING
 		       "my_get_physical_addresses: No PTE found\n");
 		pte_unmap(pte);
