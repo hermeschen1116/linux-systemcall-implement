@@ -4,6 +4,7 @@
 #include <linux/uaccess.h>
 #include <linux/sched.h>
 #include <asm/pgtable.h>
+#include <string.h>
 
 SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 {
@@ -25,8 +26,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	virtual_address = (unsigned long)user_virtual_address;
 
 	// Walk the page table to find the page table entry
-	pte = follow_pte(current->mm, virtual_address, NULL);
-	if (!pte_present(*pte)) {
+	if (!follow_pte(current->mm, virtual_address, pte, NULL)) {
 		printk(KERN_WARNING
 		       "my_get_physical_addresses: No PTE found\n");
 		pte_unmap(pte);
