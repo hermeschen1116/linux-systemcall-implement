@@ -8,21 +8,15 @@
 
 SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 {
-	unsigned long *virtual_address =
-		(unsigned long *)kmalloc(sizeof(unsigned long), GFP_KERNEL);
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
+	unsigned long *virtual_address =
+		(unsigned long *)kmalloc(sizeof(unsigned long), GFP_KERNEL);
 	unsigned long *physical_address =
 		(unsigned long *)kmalloc(sizeof(unsigned long), GFP_KERNEL);
-
-	// Check if the virtual address is valid
-	if (!access_ok((void __user *)user_virtual_address,
-		       sizeof(unsigned long))) {
-		return 0; // Invalid address
-	}
 
 	// Copy the virtual address from user space
 	if (copy_from_user(virtual_address, user_virtual_address,
