@@ -32,7 +32,6 @@ int main()
 		printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
 		wait();
 	} else { /*child code*/
-
 		printf("llllllllllllllllllllllllll  After Fork by child  llllllllllllllllllllllllllllllll\n");
 		child_use = my_get_physical_addresses(&global_a);
 		printf("******* pid=%d: global variable global_a:\n", getpid());
