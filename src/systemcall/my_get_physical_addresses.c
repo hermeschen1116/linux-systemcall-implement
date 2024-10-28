@@ -9,7 +9,7 @@
 SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 {
 	struct mm_struct *mm;
-	unsigned long virtual_address;
+	void *virtual_address;
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
