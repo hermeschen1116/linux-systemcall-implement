@@ -12,7 +12,6 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
-	pte_t *pte;
 	unsigned long virtual_address;
 	unsigned long physical_address = 0;
 
