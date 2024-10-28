@@ -55,8 +55,8 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	}
 
 	// Get the page frame number (PFN) and calculate the physical address
-	physical_address = (pte_pfn(*pte) << PAGE_SHIFT) |
-			   (virtual_address & ~PAGE_MASK);
+	physical_address = (unsigned long)((pte_pfn(*pte) << PAGE_SHIFT) |
+					   (virtual_address & ~PAGE_MASK));
 
 	pte_unmap(pte);
 
