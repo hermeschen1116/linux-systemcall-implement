@@ -9,7 +9,7 @@
 SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 {
 	struct mm_struct *mm;
-	void *virtual_address;
+	unsigned long virtual_address;
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
@@ -18,7 +18,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	unsigned long physical_address;
 
 	// Copy the virtual address from user space
-	if (copy_from_user(virtual_address, user_virtual_address,
+	if (copy_from_user(&virtual_address, user_virtual_address,
 			   sizeof(void *))) {
 		return 0;
 	}
