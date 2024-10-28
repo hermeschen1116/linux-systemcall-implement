@@ -18,7 +18,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long __user,
 	unsigned long physical_address;
 
 	// Check if the virtual address is valid
-	if (!access_ok(VERIFY_READ, (void __user *)user_virtual_address,
+	if (!access_ok((void __user *)user_virtual_address,
 		       sizeof(unsigned long))) {
 		return 0; // Invalid address
 	}
