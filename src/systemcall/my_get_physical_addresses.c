@@ -21,7 +21,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 		return 0; // Invalid address
 	}
 
-	virtual_address = user_virtual_address;
+	virtual_address = (unsigned long)user_virtual_address;
 
 	// Walk the page table
 	pgd = pgd_offset(current->mm, virtual_address);
