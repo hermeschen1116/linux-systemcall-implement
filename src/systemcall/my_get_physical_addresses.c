@@ -59,5 +59,5 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 
 	pte_unmap(pte);
 
-	return physical_address;
+	return (usigned long)physical_address;
 }
