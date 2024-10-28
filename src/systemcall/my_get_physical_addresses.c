@@ -20,7 +20,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	// Copy the virtual address from user space
 	if (copy_from_user(&virtual_address, &user_virtual_address,
 			   sizeof(void *)))
-		return ERR_PTR(-EFAULT);
+		return 0;
 
 	// Get the current process's memory map
 	mm = current->mm;
