@@ -1,10 +1,9 @@
-#include <asm/page.h>
-#include <asm/pgtable.h>
-#include <linux/highmem.h>
-#include <linux/mm.h>
-#include <linux/syscalls.h>
-#include <linux/uaccess.h>
 #include <linux/kernel.h>
+#include <linux/syscalls.h>
+#include <linux/mm.h>
+#include <linux/uaccess.h>
+#include <linux/sched.h>
+#include <asm/pgtable.h>
 
 SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 {
@@ -25,33 +24,8 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 
 	virtual_address = (unsigned long)user_virtual_address;
 
-	// Walk the page table
-	pgd = pgd_offset(current->mm, virtual_address);
-	if (pgd_none(*pgd) || pgd_bad(*pgd)) {
-		printk(KERN_WARNING "my_get_physical_addresses: Invalid PGD\n");
-		return 0;
-	}
-
-	p4d = p4d_offset(pgd, virtual_address);
-	if (p4d_none(*p4d) || p4d_bad(*p4d)) {
-		printk(KERN_WARNING "my_get_physical_addresses: Invalid P$D\n");
-		return 0;
-	}
-
-	pud = pud_offset(p4d, virtual_address);
-	if (pud_none(*pud) || pud_bad(*pud)) {
-		printk(KERN_WARNING "my_get_physical_addresses: Invalid PUD\n");
-		return 0;
-	}
-
-	pmd = pmd_offset(pud, virtual_address);
-	if (pmd_none(*pmd) || pmd_bad(*pmd)) {
-		printk(KERN_WARNING "my_get_physical_addresses: Invalid PMD\n");
-		return 0;
-	}
-
-	// Find the page table entry
-	pte = pte_offset_map(pmd, virtual_address);
+	// Walk the page table to find the page table entry
+	pte = follow_pte(current->mm, virtual_address, NULL);
 	if (!pte_present(*pte)) {
 		printk(KERN_WARNING
 		       "my_get_physical_addresses: No PTE found\n");
