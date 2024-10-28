@@ -2,7 +2,7 @@
 #include <syscall.h>
 #include <sys/types.h>
 
-//void * my_get_physical_addresses(void *);
+void *my_get_physical_addresses(void *virtual_address);
 
 int global_a = 123; //global variable
 
@@ -53,4 +53,9 @@ int main()
 		printf("____________________________________________________________________________\n");
 		sleep(1000);
 	}
+}
+
+void *my_get_physical_addresses(void *virtual_address)
+{
+	return (void *)syscall(451, virtual_address);
 }
