@@ -17,8 +17,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 	unsigned long physical_address = 0;
 
 	// Copy the virtual address from user space
-	if (copy_from_user(&virtual_address, &user_virtual_address,
-			   sizeof(void *))) {
+	if (!access_ok((void *__user)user_virtual_address, sizeof(void *))) {
 		return 0; // Invalid address
 	}
 
@@ -47,22 +46,14 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *__user, user_virtual_address)
 
 	// Find the page table entry
 	pte = pte_offset_map(pmd, virtual_address);
-	if (!pte) {
+	if (!pte_present(*pte)) {
 		return 0;
 	}
 
-	if (pte_present(*pte)) {
-		physical_address = (pte_pfn(*pte) << PAGE_SHIFT) |
-				   (virtual_address & ~PAGE_MASK);
-	}
+	physical_address = (pte_pfn(*pte) << PAGE_SHIFT) |
+			   (virtual_address & ~PAGE_MASK);
 
 	pte_unmap(pte);
-
-	// Copy the result back to user space
-	if (copy_to_user(user_virtual_address, &physical_address,
-			 sizeof(void *))) {
-		return 0;
-	}
 
 	return physical_address;
 }
