@@ -6,16 +6,15 @@
 #include <linux/uaccess.h>
 #include <linux/kernel.h>
 
-SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
+SYSCALL_DEFINE1(my_get_physical_addresses, unsigned long, user_virtual_address)
 {
-	struct mm_struct *mm;
 	unsigned long virtual_address;
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
-	unsigned long physical_address;
+	unsigned long physical_address = 0;
 
 	// Copy the virtual address from user space
 	if (copy_from_user(&virtual_address, user_virtual_address,
@@ -23,11 +22,8 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 		return 0;
 	}
 
-	// Get the current process's memory map
-	mm = current->mm;
-
 	// Walk the page table
-	pgd = pgd_offset(mm, virtual_address);
+	pgd = pgd_offset(current->mm, virtual_address);
 	if (pgd_none(*pgd) || pgd_bad(*pgd)) {
 		return 0;
 	}
