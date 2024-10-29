@@ -2,6 +2,8 @@
 #include <syscall.h>
 #include <sys/types.h>
 
+#define call_number 452
+
 void *my_get_physical_addresses(void *virtual_address);
 
 int a[2000000];
@@ -25,5 +27,5 @@ int main()
 
 void *my_get_physical_addresses(void *virtual_address)
 {
-	return (void *)syscall(451, virtual_address);
+	return (void *)syscall(call_number, virtual_address);
 }

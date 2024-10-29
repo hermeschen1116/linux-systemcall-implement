@@ -1,51 +1,54 @@
 #include <linux/syscalls.h>
 
-SYSCALL_DEFINE1(my_get_physical_addresses, void *, addr_p)
+SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 {
-	unsigned long vaddr = (unsigned long)addr_p;
+	unsigned long virtual_address = (unsigned long)user_virtual_address;
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
 	pmd_t *pmd;
 	pte_t *pte;
-	unsigned long paddr = 0;
-	unsigned long page_addr = 0;
+	unsigned long page_frame_number = 0;
 	unsigned long page_offset = 0;
+	unsigned long physical_address = 0;
 
-	pgd = pgd_offset(current->mm, vaddr);
-	if (pgd_none(*pgd)) {
-		printk("not mapped in pgd\n");
+	// Walk through the tables
+	pgd = pgd_offset(current->mm, virtual_address);
+	if (pgd_none(*pgd) || unlikely(pgd_bad(*pgd))) {
+		printk(KERN_WARNING "my_get_physical_addresses: Invalid PGD\n");
 		return 0;
 	}
 
-	p4d = p4d_offset(pgd, vaddr);
-	if (p4d_none(*p4d)) {
-		printk("not mapped in p4d\n");
+	p4d = p4d_offset(pgd, virtual_address);
+	if (p4d_none(*p4d) || unlikely(p4d_bad(*p4d))) {
+		printk(KERN_WARNING "my_get_physical_addresses: Invalid P$D\n");
 		return 0;
 	}
 
-	pud = pud_offset(p4d, vaddr);
-	if (pud_none(*pud)) {
-		printk("not mapped in pud\n");
+	pud = pud_offset(p4d, virtual_address);
+	if (pud_none(*pud) || unlikely(pud_bad(*pud))) {
+		printk(KERN_WARNING "my_get_physical_addresses: Invalid PUD\n");
 		return 0;
 	}
 
-	pmd = pmd_offset(pud, vaddr);
-	if (pmd_none(*pmd)) {
-		printk("not mapped in pmd\n");
+	pmd = pmd_offset(pud, virtual_address);
+	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd))) {
+		printk(KERN_WARNING "my_get_physical_addresses: Invalid PMD\n");
 		return 0;
 	}
 
-	pte = pte_offset_kernel(pmd, vaddr);
+	// Find the page table entry
+	pte = pte_offset_kernel(pmd, virtual_address);
 	if (pte_none(*pte)) {
-		printk("not mapped in pte\n");
+		printk(KERN_WARNING
+		       "my_get_physical_addresses: No PTE found\n");
 		return 0;
 	}
 
-	/* Page frame physical address mechanism | offset */
-	page_addr = pte_val(*pte) & PAGE_MASK;
-	page_offset = vaddr & ~PAGE_MASK;
-	paddr = page_addr | page_offset;
+	// calculate physical address
+	page_frame_number = pte_pfn(*pte);
+	page_offset = virtual_address & ~PAGE_MASK;
+	physical_address = (page_frame_number << PAGE_SHIFT) | page_offset;
 
-	return paddr;
+	return physical_address;
 }
