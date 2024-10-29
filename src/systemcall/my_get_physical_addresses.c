@@ -49,6 +49,8 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	page_frame_number = pte_val(*pte) & PAGE_MASK;
 	page_offset = virtual_address & ~PAGE_MASK;
 	physical_address = page_frame_number | page_offset;
+	printk(KERN_DEBUG "my_get_physical_addresses:\nvirtual address: %lx\n",
+	       virtual_address);
 	printk(KERN_DEBUG
 	       "my_get_physical_addresses:\npage frame number: %lx, page offset: %lx\n",
 	       (page_frame_number >> PAGE_SHIFT), page_offset);
