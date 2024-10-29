@@ -1,2 +1,1 @@
-obj-y := hello_world.o \
-		 my_get_physical_addresses.o
+obj-y :=  my_get_physical_addresses.o
