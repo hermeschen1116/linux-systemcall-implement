@@ -37,14 +37,14 @@ int main()
 		*shared_memory = 114514;
 		printf("New value in child process: %d\n", *shared_memory);
 
-		printf("Child's physical address after write: [%p\n",
+		printf("Child's physical address after write: [%p]\n",
 		       my_get_physical_addresses(shared_memory));
 
 		exit(0);
 	} else {
 		wait(NULL);
 
-		printf("Parent's physical address after child's write: [%p\n",
+		printf("Parent's physical address after child's write: [%p]\n",
 		       my_get_physical_addresses(shared_memory));
 		unsigned long parent_physical_address_after =
 			(unsigned long)my_get_physical_addresses(shared_memory);
