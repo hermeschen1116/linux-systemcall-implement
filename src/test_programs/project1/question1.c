@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include "function.h"
