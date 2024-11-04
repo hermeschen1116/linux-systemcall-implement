@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 
 // 定義自訂的 system call 編號
-#define SYS_my_get_physical_address 451
+#define SYS_my_get_physical_address 452
 
 // 自訂 system call 的函數
 unsigned long get_physical_address(void *virtual_address)
