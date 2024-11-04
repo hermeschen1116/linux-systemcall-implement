@@ -18,8 +18,8 @@ unsigned long get_physical_address(void *virtual_address)
 int main()
 {
 	// 1. 分配一個頁面大小的共享記憶體區段
-	int *shared_memory =
-		mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0);
+	int *shared_memory = mmap(NULL, 4096, PROT_READ | PROT_WRITE,
+				  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (shared_memory == MAP_FAILED) {
 		perror("mmap failed");
 		exit(1);
