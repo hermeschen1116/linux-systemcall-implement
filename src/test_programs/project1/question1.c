@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/mman.h>
-#include <sys/wait.h>
 
 #define SYS_my_get_physical_address 452
 
-void *my_get_physical_addresses(void *virtual_address);
+unsigned long my_get_physical_addresses(void *virtual_address);
 
 int main()
 {
@@ -18,33 +18,33 @@ int main()
 	*shared_memory = 48763;
 
 	printf("Initial value in parent process: %d\n", *shared_memory);
-	printf("Parent's physical address before fork: [%p]\n",
+	printf("Parent's physical address before fork: [0x%lx]\n",
 	       my_get_physical_addresses(shared_memory));
 	unsigned long parent_physical_address_before =
-		(unsigned long)my_get_physical_addresses(shared_memory);
+		my_get_physical_addresses(shared_memory);
 
 	pid_t pid = fork();
 	if (pid < 0) {
 		perror("fork failed");
 		exit(1);
 	} else if (pid == 0) {
-		printf("Child's physical address before write: [%p]\n",
+		printf("Child's physical address before write: [0x%lx]\n",
 		       my_get_physical_addresses(shared_memory));
 
 		*shared_memory = 114514;
 		printf("New value in child process: %d\n", *shared_memory);
 
-		printf("Child's physical address after write: [%p]\n",
+		printf("Child's physical address after write: [0x%lx]\n",
 		       my_get_physical_addresses(shared_memory));
 
 		exit(0);
 	} else {
 		wait(NULL);
 
-		printf("Parent's physical address after child's write: [%p]\n",
+		printf("Parent's physical address after child's write: [0x%lx]\n",
 		       my_get_physical_addresses(shared_memory));
 		unsigned long parent_physical_address_after =
-			(unsigned long)my_get_physical_addresses(shared_memory);
+			my_get_physical_addresses(shared_memory);
 
 		if (parent_physical_address_after ==
 		    parent_physical_address_before) {
@@ -58,7 +58,7 @@ int main()
 	return 0;
 }
 
-void *my_get_physical_addresses(void *virtual_address)
+unsigned long my_get_physical_addresses(void *virtual_address)
 {
-	return (void *)syscall(SYS_my_get_physical_address, virtual_address);
+	return syscall(SYS_my_get_physical_address, virtual_address);
 }
