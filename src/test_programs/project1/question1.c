@@ -1,62 +1,65 @@
 #include <stdio.h>
-#include <syscall.h>
-#include <sys/types.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
 
-#define call_number 452
+#define SYS_my_get_physical_address 452
 
-void *my_get_physical_addresses(void *virtual_address);
-
-int global_a = 123; //global variable
-
-void hello(void)
-{
-	printf("======================================================================================================\n");
-}
+unsigned long my_get_physical_addresses(void *virtual_address);
 
 int main()
 {
-	int loc_a;
-	void *parent_use, *child_use;
-
-	printf("===========================Before Fork==================================\n");
-	parent_use = my_get_physical_addresses(&global_a);
-	printf("pid=%d: global variable global_a:\n", getpid());
-	printf("Offest of logical address:[%p]   Physical address:[%p]\n",
-	       &global_a, parent_use);
-	printf("========================================================================\n");
-
-	if (fork()) { /*parent code*/
-		printf("vvvvvvvvvvvvvvvvvvvvvvvvvv  After Fork by parent  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-		parent_use = my_get_physical_addresses(&global_a);
-		printf("pid=%d: global variable global_a:\n", getpid());
-		printf("******* Offset of logical address:[%p]   Physical address:[%p]\n",
-		       &global_a, parent_use);
-		printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-		wait();
-	} else { /*child code*/
-		printf("llllllllllllllllllllllllll  After Fork by child  llllllllllllllllllllllllllllllll\n");
-		child_use = my_get_physical_addresses(&global_a);
-		printf("******* pid=%d: global variable global_a:\n", getpid());
-		printf("******* Offset of logical address:[%p]   Physical address:[%p]\n",
-		       &global_a, child_use);
-		printf("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll\n");
-		printf("____________________________________________________________________________\n");
-
-		/*----------------------- trigger CoW (Copy on Write) -----------------------------------*/
-		global_a = 789;
-
-		printf("iiiiiiiiiiiiiiiiiiiiiiiiii  Test copy on write in child  iiiiiiiiiiiiiiiiiiiiiiii\n");
-		child_use = my_get_physical_addresses(&global_a);
-		printf("******* pid=%d: global variable global_a:\n", getpid());
-		printf("******* Offset of logical address:[%p]   Physical address:[%p]\n",
-		       &global_a, child_use);
-		printf("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n");
-		printf("____________________________________________________________________________\n");
-		sleep(1000);
+	int *shared_memory = mmap(NULL, 4096, PROT_READ | PROT_WRITE,
+				  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (shared_memory == MAP_FAILED) {
+		perror("mmap failed");
+		exit(1);
 	}
+	*shared_memory = 48763;
+
+	printf("Initial value in parent process: %d\n", *shared_memory);
+	printf("Parent's physical address before fork: [0x%lx]\n",
+	       my_get_physical_addresses(shared_memory));
+	unsigned long parent_physical_address_before =
+		my_get_physical_addresses(shared_memory);
+
+	pid_t pid = fork();
+	if (pid < 0) {
+		perror("fork failed");
+		exit(1);
+	} else if (pid == 0) {
+		printf("Child's physical address before write: [0x%lx]\n",
+		       my_get_physical_addresses(shared_memory));
+
+		*shared_memory = 114514;
+		printf("New value in child process: %d\n", *shared_memory);
+
+		printf("Child's physical address after write: [0x%lx]\n",
+		       my_get_physical_addresses(shared_memory));
+
+		exit(0);
+	} else {
+		wait(NULL);
+
+		printf("Parent's physical address after child's write: [0x%lx]\n",
+		       my_get_physical_addresses(shared_memory));
+		unsigned long parent_physical_address_after =
+			my_get_physical_addresses(shared_memory);
+
+		if (parent_physical_address_after ==
+		    parent_physical_address_before) {
+			printf("Parent's physical address remains the same.\n");
+		} else {
+			printf("Parent's physical address has changed (unexpected in COW).\n");
+		}
+	}
+
+	munmap(shared_memory, 4096);
+	return 0;
 }
 
-void *my_get_physical_addresses(void *virtual_address)
+unsigned long my_get_physical_addresses(void *virtual_address)
 {
-	return (void *)syscall(call_number, virtual_address);
+	return syscall(SYS_my_get_physical_address, virtual_address);
 }
