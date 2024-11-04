@@ -1,14 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
-#include <fcntl.h>
-#include <stdint.h>
-
-#define SYS_my_get_physical_address 452
-
-void *my_get_physical_addresses(void *virtual_address);
+#include "function.h"
 
 int main()
 {
@@ -60,9 +53,4 @@ int main()
 	// 6. 解除映射
 	munmap(shared_memory, 4096);
 	return 0;
-}
-
-void *my_get_physical_addresses(void *virtual_address)
-{
-	return (void *)syscall(SYS_my_get_physical_address, virtual_address);
 }

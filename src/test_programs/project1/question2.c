@@ -1,10 +1,6 @@
 #include <stdio.h>
-#include <syscall.h>
 #include <sys/types.h>
-
-#define call_number 452
-
-void *my_get_physical_addresses(void *virtual_address);
+#include "function.h"
 
 int a[2000000];
 
@@ -23,9 +19,4 @@ int main()
 	printf("Offest of logical address:[%p]   Physical address:[%p]\n",
 	       &a[1999999], phy_add);
 	printf("========================================================================\n");
-}
-
-void *my_get_physical_addresses(void *virtual_address)
-{
-	return (void *)syscall(call_number, virtual_address);
 }
