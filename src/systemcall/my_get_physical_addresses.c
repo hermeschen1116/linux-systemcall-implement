@@ -46,7 +46,7 @@ SYSCALL_DEFINE1(my_get_physical_addresses, void *, user_virtual_address)
 	}
 
 	// calculate physical address
-	page_frame_number = pte_val(*pte) & PAGE_MASK;
+	page_frame_number = pte_pfn(*pte) << PAGE_SHIFT;
 	page_offset = virtual_address & ~PAGE_MASK;
 	physical_address = page_frame_number | page_offset;
 	printk(KERN_DEBUG
