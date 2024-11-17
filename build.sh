@@ -10,7 +10,7 @@ cp src/systemcall/* linux/custom_systemcall/
 
 # build
 KBUILD_BUILD_TIMESTAMP="" sudo make menuconfig CC="ccache gcc" -j$process -C$source O=$build_dir
-KBUILD_BUILD_TIMESTAMP="" sudo make CC="ccache gcc" Arch=$architecture -j$process -C$source O=$build_dir
+KBUILD_BUILD_TIMESTAMP="" sudo make CC="ccache gcc" Arch=$architecture -j$process -C$source O=$build_dir 2>&1 | tee build.log
 
 # install
 sudo make modules_install -j$process -C$source O=$build_dir
