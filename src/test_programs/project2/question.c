@@ -21,7 +21,6 @@ void *enter_wait_queue(void *thread_id)
 	}
 
 	fprintf(stderr, "exit wait queue thread_id: %d\n", *(int *)thread_id);
-	free(thread_id);
 	return NULL;
 }
 
