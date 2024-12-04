@@ -21,10 +21,10 @@ void *enter_wait_queue(void *thread_id)
 	}
 
 	fprintf(stderr, "exit wait queue thread_id: %d\n", *(int *)thread_id);
-	return NULL;
+	return (void *)result;
 }
 
-void clean_wait_queue()
+void *clean_wait_queue()
 {
 	long result = syscall(SYS_call_my_wait_queue, 2);
 	if (result != 1) {
@@ -32,6 +32,8 @@ void clean_wait_queue()
 			"Error: Failed to clean wait queue. Return value: %ld\n",
 			result);
 	}
+
+	return (void *)result;
 }
 
 int main()
