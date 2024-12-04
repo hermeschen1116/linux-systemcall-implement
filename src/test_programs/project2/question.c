@@ -5,23 +5,34 @@
 #include <sys/syscall.h>
 
 #define NUM_THREADS 10
+#define SYS_call_my_wait_queue 453
 
 void *enter_wait_queue(void *thread_id)
 {
 	fprintf(stderr, "enter wait queue thread_id: %d\n", *(int *)thread_id);
-	/*
-	// your syscall here
-	syscall( xxx , 1);
-	*/
+	long result = syscall(SYS_call_my_wait_queue, 1);
+
+	if (result != 1) {
+		fprintf(stderr,
+			"Error: syscall failed with result %ld for thread_id: %d\n",
+			result, *(int *)thread_id);
+		free(thread_id);
+		pthread_exit(NULL);
+	}
+
 	fprintf(stderr, "exit wait queue thread_id: %d\n", *(int *)thread_id);
+	free(thread_id); // 釋放記憶體
+	return NULL;
 }
 
-void *clean_wait_queue()
+void clean_wait_queue()
 {
-	/*
-	// your syscall here
-	syscall( xxx , 2);
-	*/
+	long result = syscall(SYS_call_my_wait_queue, 2);
+	if (result != 1) {
+		fprintf(stderr,
+			"Error: Failed to clean wait queue. Return value: %ld\n",
+			result);
+	}
 }
 
 int main()
